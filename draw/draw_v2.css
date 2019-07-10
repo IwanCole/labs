@@ -1,0 +1,27 @@
+html, body {
+    margin: 0;
+    background-color: #191919;
+    touch-action: none;
+    overflow: hidden;
+}
+canvas {
+    margin: 5px auto;
+    display: block;
+}
+img {
+    display: none;
+}
+
+.metrics {
+    display: block;
+    position: absolute;
+    margin: 30px 0 0 30px;
+    top: 0;
+    left: 0;
+}
+.metrics > p {
+    margin: 0;
+}
+span {
+    display: inline-block;
+}

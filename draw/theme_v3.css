@@ -1,0 +1,15 @@
+html.theme1 {
+    background-color: #191919;
+}
+
+html.theme2 {
+    background-color: #e6e6e6;
+}
+
+.theme1 i.menu-icon {
+    color: #ffffff;
+}
+
+.theme2 i.menu-icon {
+    color: #000000;
+}

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lan="en">
+<html class="noTouch theme1" lan="en">
 <head>
     <title>Draw</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta charset="UTF-8">
-<!--    <meta name="theme-color" content="#191919">-->
-<!--    <meta name="apple-mobile-web-app-status-bar-style" content="#191919">-->
+    <meta name="theme-color" content="#222222">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#222222">
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
-    <link rel="stylesheet" type="text/css" href="draw_v2.css">
+    <link rel="stylesheet" type="text/css" href="draw_v3.css">
+    <link rel="stylesheet" type="text/css" href="theme_v3.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     
@@ -20,11 +21,15 @@
     <div class="menu-cont">
         <i class="material-icons menu-icon">keyboard_arrow_up</i>
         <p class="menu-title">LINE WIDTH</p>
+        <input class="menu-slider" type="range" min="2" max="20" step="2" value="8">
         <p class="menu-title">THEME</p>
+        <p value="0" class="menu-theme">LIGHT</p>
+        <p value="1" class="menu-theme theme-active">DARK</p>
         <p class="menu-title">CLEAR</p>
+        <p class="menu-clear">EMPTY CANVAS</p>
     </div>
     
     <canvas></canvas>
-    <script src="draw_v2.js"></script>
+    <script src="draw_v3.js"></script>
 </body>
 </html>

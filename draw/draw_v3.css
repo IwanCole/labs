@@ -1,0 +1,125 @@
+html, body {
+    margin: 0;
+    touch-action: none;
+    overflow: hidden;
+    font-family: 'Oswald', sans-serif;
+    transition-duration: 200ms;
+}
+.noTouch {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+canvas {
+    margin: 0;
+    display: block;
+    transition-duration: 100ms;
+    overflow: hidden;
+}
+img {
+    display: none;
+}
+
+i.menu-icon {
+    font-weight: bold;
+    position: absolute;
+    bottom: 305px;
+    right: 20px;
+    font-size: 40px;
+    transition-duration: 200ms;
+}
+.canvas-blur {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+.menu-cont {
+    display: block;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    bottom: -300px;
+    right: 0px;
+    background-color: #525252;
+    z-index: 2;
+    transition-duration: 300ms;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: center
+}
+.menu-open {
+    bottom: 0px;
+}
+.menu-open > i.menu-icon {
+    transform: rotate(180deg);
+}
+.menu-title {
+    display: block;
+    padding-left: 20px;
+    color: #ffffff;
+    text-align: left;
+    margin: 10px 0;
+}
+
+.menu-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 90%;
+    margin: 10px auto;
+    display: inline-block;
+    height: 6px;
+    outline: none;
+    transition-duration: 200ms;
+    border-radius: 10px;
+}
+.menu-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #ff595e;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.menu-theme, .menu-clear {
+    display: inline-block;
+    margin: 0 10px;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    padding: 4px 0;
+    font-size: 18px;
+    transition-duration: 200ms;
+    background-color: rgba(0,0,0,0);
+    cursor: pointer;
+}
+.menu-theme {
+    margin-bottom: 10px;
+    width: 40%;
+}
+.menu-clear {
+    width: 70%;
+    margin-bottom: 30px;
+}
+.menu-clear:active {
+    font-weight: bold;
+    background-color: #ff595e;
+}
+
+.theme-active {
+    font-weight: bold;
+    border-width: 2px;
+    background-color: #ff595e;
+}
+
+
+@media only screen and (max-width: 470px) {
+    .menu-cont {
+        width: 100%;
+/*        height: auto;*/
+/*        bottom: 0;*/
+        right: 0;
+    }
+}

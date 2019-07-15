@@ -72,8 +72,19 @@ function Ball(x,y,vx,vy,rad,col) {
     this.dy = (vy >= 0) ? 1 : -1;
     this.radius = rad;
     this.col = col;
-    console.log(this.col);
-        
+//    console.log(this.col);
+    
+    this.get_velocity = function() {
+        return [this.mx, this.my, this.dx, this.dy];
+    }
+    
+    this.set_velocity = function(vel) {
+        this.mx = vel[0];
+        this.my = vel[1];
+        this.dx = vel[2];
+        this.dy = vel[3];
+    }
+    
     this.draw = function() {
         c.fillStyle = this.col;
         c.beginPath();
@@ -89,8 +100,8 @@ function Ball(x,y,vx,vy,rad,col) {
                 mouse.x <= this.x + this.radius &&
                 mouse.y >= this.y - this.radius &&
                 mouse.y <= this.y + this.radius) {
-                this.dx = (this.dx == 0) ? 1 : this.dx;
-                this.dy = (this.dy == 0) ? -1 : this.dy;
+                this.dx = -this.dx;
+                this.dy = -this.dy;
                 this.mx += Math.floor(Math.random()*(16)+5);
                 this.my += Math.floor(Math.random()*(16)+7);
                 mouse.x = undefined;
@@ -112,6 +123,9 @@ function Ball(x,y,vx,vy,rad,col) {
             this.mx -= 0.5;
         }
         
+        
+        
+        
         // Gravity
         if (this.my == 0 && this.dy == -1) this.dy = 1;
         this.my += this.dy;
@@ -130,7 +144,7 @@ function Ball(x,y,vx,vy,rad,col) {
                 this.mx -= 0.5;
             }
             else {
-                this.dx = 0;
+                this.mx = 0;
             }
         }
         
@@ -174,14 +188,43 @@ for (var i = 0; i < 5; i++) {
     var r = Math.floor(Math.random()*(14)+45);
     var vx = Math.floor(Math.random()*(7)-2);
     var vy = Math.floor(Math.random()*(4)-1);    
-    balls.push(new Ball(100, 100, vx, vy, r, cols[i]));
+    balls.push(new Ball(50+(i*150), 100, vx, vy, r, cols[i]));
 }
 
 
 function animate() {
     req = requestAnimationFrame(animate);
     c.clearRect(0, 0, WIDTH, HEIGHT);
-    for (var i = 0; i < 5; i++) balls[i].update();
+    for (var i = 0; i < 5; i++) {
+        for (var j = i + 1; j < 5; j++) {
+            var dist = Math.pow(balls[i].x-balls[j].x, 2) + Math.pow(balls[i].y-balls[j].y, 2);
+            dist = Math.sqrt(dist);
+            var rads = balls[i].radius + balls[j].radius;
+            
+            // Check for overlap, separate if glitching
+            if (dist < rads) {
+                var overlap = Math.ceil((rads - dist));
+                balls[i].x = balls[i].x + (overlap * -balls[i].dx);
+                balls[i].y = balls[i].y + (overlap * -balls[i].dy);
+                balls[j].x = balls[j].x + (overlap * -balls[j].dx);
+                balls[j].y = balls[j].y + (overlap * -balls[j].dy);
+            }
+            
+            // Check for collision and conserve momentum
+            if (dist <= rads) {
+                console.log(`Collision between balls ${i},${j}`);
+                var temp1 = balls[i].get_velocity();
+                var temp2 = balls[j].get_velocity();
+                temp1[0] = (temp1[0] == 0) ? 1 : temp1[0];
+                temp1[1] = (temp1[1] == 0) ? 1 : temp1[1];
+                temp2[0] = (temp2[0] == 0) ? 1 : temp2[0];
+                temp2[1] = (temp2[1] == 0) ? 1 : temp2[1];
+                balls[i].set_velocity(temp2);
+                balls[j].set_velocity(temp1);
+            }
+        }
+        balls[i].update();
+    }
 }
 
 req = requestAnimationFrame(animate);

@@ -1,5 +1,7 @@
 var WIDTH = null;
 var HEIGHT = null;
+var dampener = 0.1;
+var hyper = false;
 var canvas = document.querySelector("canvas");
 
 if ( navigator.platform != "iPad" && navigator.platform != "iPhone" && navigator.platform != "iPod" ) {
@@ -18,6 +20,21 @@ const X0 = Math.round(WIDTH/2);
 const Y0 = Math.round(HEIGHT/2);
 
 
+window.addEventListener('mousedown', (e) => {
+    hyper = true;
+});
+window.addEventListener('mouseup', (e) => {
+    hyper = false;
+});
+window.addEventListener('touchstart', (e) => {
+    hyper = true;
+});
+window.addEventListener('touchend', (e) => {
+    hyper = false;
+});
+
+
+
 class Planet {
     constructor(x0, y0, orbit, radius, colour, speed) {
         this.radius = radius;
@@ -33,28 +50,26 @@ class Planet {
         this.x = Math.round(WIDTH/2);
         this.y = Math.round(HEIGHT/2) + orbit;
     }
-    
-    
+
     draw() {
         ctx.fillStyle = this.col;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
         ctx.fill();
     }
-    
+
     update() {
         var newX  = this.orbit * Math.cos(this.angle * (Math.PI/180));
         var newY = this.orbit * Math.sin(this.angle * (Math.PI/180));
-        
+
         this.x = newX + this.origin.x;
         this.y = newY + this.origin.y;
-        this.angle += (this.speed *0.2);
-        if (this.angle == 360) this.angle = 0;
-    
+        this.angle += (this.speed * dampener);
+        if (this.angle >= 360) this.angle %= 360;
+
         this.draw();
     }
 }
-
 
 
 class Moon extends Planet {
@@ -64,7 +79,7 @@ class Moon extends Planet {
         super(x, y, orbit, radius, colour, speed);
         this.plt_i = plt_i;
     }
-    
+
     update() {
         this.origin.x = planets[this.plt_i].x;
         this.origin.y = planets[this.plt_i].y;
@@ -73,10 +88,7 @@ class Moon extends Planet {
 }
 
 
-
-
 var planets = [];
-var moons = [];
 
 Object.keys(PLT).forEach(function(key,index) {
     planets.push(new Planet(X0, Y0, PLT[key].orbit, PLT[key].radius, PLT[key].col, PLT[key].speed));
@@ -90,34 +102,22 @@ Object.keys(MOON).forEach(function(key,index) {
 function animate() {
     req = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
-    
+
     ctx.fillStyle = "#ffd834";
     ctx.beginPath();
     ctx.arc(X0, Y0, 22, 0, Math.PI*2, false);
     ctx.fill();
-    
-    for (var i = 0; i < planets.length; i++) {
-        planets[i].update();
+
+    for (var i = 0; i < planets.length; i++) planets[i].update();
+
+    if (hyper && dampener < 2) {
+        dampener += 0.02;
+        if (dampener > 2) dampener = 2;
     }
-    for (var i = 0; i < moons.length; i++) {
-        moons[i].update();
+    else if (!hyper && dampener > 0.15) {
+        dampener -= 0.02;
+        if (dampener < 0.15) dampener = 0.15;
     }
 }
 
 req = requestAnimationFrame(animate);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

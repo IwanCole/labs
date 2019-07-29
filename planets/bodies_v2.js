@@ -188,21 +188,12 @@ const MOON = {
         col: "#f1f4e5",
         speed: 0.9,
         plt_i: 7
+    },
+    p0 : {
+        orbit: 6,
+        radius: 1,
+        col: "#f1f4e5",
+        speed: 1.2,
+        plt_i: 8
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

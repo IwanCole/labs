@@ -1,8 +1,95 @@
 html, body {
     margin: 0;
     background-color: #0b0b0b;
+    overflow: hidden;
+    font-family: 'Courier New';
 }
 canvas {
     display: block;
     position: absolute;
+    z-index: -1;
+}
+.canvas-zoom {
+    transform: scale(0.5) translate(-50%, -50%);
+}
+.info-pic {
+    width: 48px;
+    height: 48px;
+    background-image: url("rocket.png");
+    display: block;
+    background-size: 28px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    bottom: -50px;
+    opacity: 0;
+    left: 47%;
+    cursor: pointer;
+    background-color: #393939;
+    border-radius: 28px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #626262;
+    box-sizing: border-box;
+    animation: picShow 8s linear 4s 1 forwards;
+}
+.info {
+    background-color: #ffffff;
+    display: block;
+    position: absolute;
+    width: 90%;
+    max-width: 350px;
+    opacity: 1;
+    height: 0px;
+    text-align: center;
+    border-radius: 15px;
+    box-sizing: border-box;
+    bottom: 30px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.info-text {
+    font-size: 0px;
+    height: 0px;
+    width: 0px;
+    font-weight: bold;
+    color: #000000;
+    margin: 5px 0;
+    opacity: 0;
+}
+.info-progress {
+    display: block;
+    width: 0%;
+    height: 3px;
+    background-color: #000000;
+    border-radius: 5px;
+    margin: 0 auto;   
+}
+
+.info-active {
+    animation: notifOpen 0.2s linear 0s 1 forwards, notifClose 0.5s linear 7.6s 1 forwards;
+}
+.info-active > .info-text {
+    animation: textShow 0.2s linear 0.3s 1 forwards;
+}
+.info-active > .info-progress {
+    animation: progress 7s linear 0.3s 1 forwards;
+}
+
+.clock {
+    opacity: 0;
+    position: absolute;
+    color: #ffd834;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0;
+    top: 54%;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    transition-duration: 0.2s;
+}
+.clock-active {
+    opacity: 1;
 }

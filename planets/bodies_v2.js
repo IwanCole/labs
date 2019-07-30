@@ -60,21 +60,21 @@ const MOON = {
         orbit: 18,
         radius: 3,
         col: "#ffffff",
-        speed: 1.3,
+        speed: 2.5,
         plt_i: 2
     },
     m0 : {
         orbit: 10,
         radius: 1,
         col: "#ffffff",
-        speed: 1,
+        speed: 2,
         plt_i: 3
     },
     m1 : {
         orbit: 15,
         radius: 1,
         col: "#ffffff",
-        speed: 0.8,
+        speed: 1.3,
         plt_i: 3
     },
     j0 : {
@@ -188,21 +188,12 @@ const MOON = {
         col: "#f1f4e5",
         speed: 0.9,
         plt_i: 7
+    },
+    p0 : {
+        orbit: 6,
+        radius: 1,
+        col: "#f1f4e5",
+        speed: 1.2,
+        plt_i: 8
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

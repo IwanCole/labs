@@ -23,6 +23,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
 var ctx = canvas.getContext('2d');
+ctx.lineCap = "round";
 
 
 function draw_start(e, touches) {

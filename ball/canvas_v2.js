@@ -1,51 +1,3 @@
-//
-//function Coin(x) {
-//    this.x = x;
-//    this.y = -50;
-//    this.dy = 1;
-//    this.radius = 50;
-//    
-//    this.draw = function() {
-//        c.beginPath();
-//        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-//        c.strokeStyle = "black";
-//        c.stroke();
-//        c.fill();
-//    }
-//    
-//    this.update = function() {
-//        this.y += this.dy;
-//        this.draw();
-//    }
-//}
-//
-//            
-//
-//var canvas = document.querySelector("canvas");
-//
-//canvas.width = window.innerWidth;
-//canvas.height = window.innerHeight;
-//
-//var c = canvas.getContext('2d');
-//
-//
-//var list = [];
-//for (var i = 0; i < 10; i++) {
-//    list.push(new Coin(50));
-//}
-//
-//
-//function animate() {
-//    requestAnimationFrame(animate);
-//    c.clearRect(0, 0, innerWidth, innerHeight);
-//    for (var i =0; i < 10; i++) {
-//        list[i].update();
-//    }
-//}
-//
-//animate();
-//
-
 var mouse = {
     x: undefined,
     y: undefined
@@ -72,8 +24,33 @@ function Ball(x,y,vx,vy,rad,col) {
     this.dy = (vy >= 0) ? 1 : -1;
     this.radius = rad;
     this.col = col;
-    console.log(this.col);
-        
+//    this.mass = 1;
+
+    this.velocity = function() {
+        return {
+            x: this.mx * this.dx,
+            y: this.my * this.dy
+        };
+    }
+    
+    this.get_velocity = function() {
+        return [this.mx, this.my, this.dx, this.dy];
+    }
+    
+    this.set_velocity = function(vel) {
+        this.mx = vel[0];
+        this.my = vel[1];
+        this.dx = vel[2];
+        this.dy = vel[3];
+    }
+    
+    this.set_velocity2 = function(v) {
+        this.mx = Math.abs(v.x);
+        this.my = Math.abs(v.y);
+        this.dx = (v.x >= 0) ? 1 : -1;
+        this.dy = (v.y >= 0) ? 1 : -1;
+    }
+    
     this.draw = function() {
         c.fillStyle = this.col;
         c.beginPath();
@@ -89,8 +66,8 @@ function Ball(x,y,vx,vy,rad,col) {
                 mouse.x <= this.x + this.radius &&
                 mouse.y >= this.y - this.radius &&
                 mouse.y <= this.y + this.radius) {
-                this.dx = (this.dx == 0) ? 1 : this.dx;
-                this.dy = (this.dy == 0) ? -1 : this.dy;
+                this.dx = -this.dx;
+                this.dy = -this.dy;
                 this.mx += Math.floor(Math.random()*(16)+5);
                 this.my += Math.floor(Math.random()*(16)+7);
                 mouse.x = undefined;
@@ -112,6 +89,9 @@ function Ball(x,y,vx,vy,rad,col) {
             this.mx -= 0.5;
         }
         
+        
+        
+        
         // Gravity
         if (this.my == 0 && this.dy == -1) this.dy = 1;
         this.my += this.dy;
@@ -130,7 +110,7 @@ function Ball(x,y,vx,vy,rad,col) {
                 this.mx -= 0.5;
             }
             else {
-                this.dx = 0;
+                this.mx = 0;
             }
         }
         
@@ -174,14 +154,29 @@ for (var i = 0; i < 5; i++) {
     var r = Math.floor(Math.random()*(14)+45);
     var vx = Math.floor(Math.random()*(7)-2);
     var vy = Math.floor(Math.random()*(4)-1);    
-    balls.push(new Ball(100, 100, vx, vy, r, cols[i]));
+    balls.push(new Ball(50+(i*150), 100, vx, vy, r, cols[i]));
 }
 
 
 function animate() {
     req = requestAnimationFrame(animate);
     c.clearRect(0, 0, WIDTH, HEIGHT);
-    for (var i = 0; i < 5; i++) balls[i].update();
+    
+    for (var i = 0; i < 5; i++) {
+        for (var j = i + 1; j < 5; j++) {
+            
+            var dist = Math.pow(balls[i].x-balls[j].x, 2) + Math.pow(balls[i].y-balls[j].y, 2);
+            dist = Math.sqrt(dist);
+            var rads = balls[i].radius + balls[j].radius;
+                        
+            // Check for collision and conserve momentum
+            if (dist <= rads) {
+                resolveCollision(balls[i], balls[j]);
+                console.log(`Collision between balls ${i},${j}`);
+            }
+        }
+        balls[i].update();
+    }
 }
 
 req = requestAnimationFrame(animate);

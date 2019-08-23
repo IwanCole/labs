@@ -85,8 +85,38 @@ function draw_end(e, touches) {
             ongoingTouches.splice(idx, 1);
         }
     }
+    checkpoint();
 }
 
+function checkpoint() {
+    var bmp = canvas.toDataURL();
+    window.localStorage.setItem("canvas", bmp);
+}
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    window.localStorage.removeItem("canvas");
+    
+    var draw = document.querySelector(".draw-icon");
+    draw.classList.remove("draw-icon-animate");
+    void draw.offsetWidth;
+    draw.classList.add("draw-icon-animate");
+}
+
+function loadCanvasCheckpoint() {
+    var bmp = window.localStorage.getItem("canvas");
+    if (bmp) {
+        var img = new Image;
+        img.src = bmp;
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0);
+        }
+    }
+    else {
+        var draw = document.querySelector(".draw-icon");
+        draw.classList.add("draw-icon-animate");
+    }
+}
 
 function ongoingTouchIndexById(idToFind) {
     for (var i = 0; i < ongoingTouches.length; i++) {
@@ -147,7 +177,7 @@ function init() {
     });
     
     clearBtn.addEventListener('click', (e) => {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT); 
+        clearCanvas(); 
     });
     
     for(var i = 0; i < themeBtn.length; i+= 1) {
@@ -156,7 +186,7 @@ function init() {
         });
     }
     
-
+    loadCanvasCheckpoint();
     
     if (mobileDevice) {
         canvas.addEventListener('touchstart', (e) => {

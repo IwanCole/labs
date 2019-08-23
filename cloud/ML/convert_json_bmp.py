@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 LINE_WIDTH = 2
-NUMBER_OF_IMAGES = 20
+NUMBER_OF_IMAGES = 3000
 INPUT_DIR = 'D:\\sketch_input\\'
 OUTPUT_BASE_DIR = 'D:\\sketch_data\\'
 
@@ -36,6 +36,8 @@ def save_image(canvas, CLASS_NAME):
 
 
 files = os.listdir(INPUT_DIR)
+
+files = [file for file in files if file in ['full_simplified_dog.ndjson', 'full_simplified_bird.ndjson', 'full_simplified_fish.ndjson']]
 
 confirm = input(f'This will generate {len(files) * NUMBER_OF_IMAGES} image files, continute? Y/N')
 if confirm not in ['Y', 'y']: sys.exit()

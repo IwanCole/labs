@@ -1,3 +1,20 @@
+import numpy as np
+from PIL import Image
+
+def load_image(filename):
+    '''
+    Load an image from a given filename, and process it into grayscale.
+    '''
+    norm = np.vectorize(lambda x: 0 if x < 128 else 1)
+    img = Image.open(filename).convert('L')
+    img.load()
+    imgArray = np.asarray(img, dtype="int32")
+    imgArray = norm(imgArray)
+    imgArray = np.expand_dims(imgArray, 2)
+    return imgArray
+
+
+
 def get_line(start, end):
     """Bresenham's Line Algorithm
     Produces a list of tuples from start and end

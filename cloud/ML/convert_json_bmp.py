@@ -3,9 +3,10 @@ import ndjson
 import helpers
 import numpy as np
 from PIL import Image
+from multiprocessing import Pool
 
 LINE_WIDTH = 2
-NUMBER_OF_IMAGES = 3000
+NUMBER_OF_IMAGES = 20000
 INPUT_DIR = 'D:\\sketch_input\\'
 OUTPUT_BASE_DIR = 'D:\\sketch_data\\'
 
@@ -30,21 +31,14 @@ def resize_image(canvas):
     return np.array(Image.fromarray(canvas).resize((100,100)))
 
 
-def save_image(canvas, CLASS_NAME):
+def save_image(canvas, CLASS_NAME, index):
     im = Image.fromarray(canvas).convert('L')
-    im.save(f'{OUTPUT_BASE_DIR}{CLASS_NAME}\\{CLASS_NAME}_{count}.jpg')
+    im.save(f'{OUTPUT_BASE_DIR}{CLASS_NAME}\\{CLASS_NAME}_{index}.jpg')
 
 
-files = os.listdir(INPUT_DIR)
-
-files = [file for file in files if file in ['full_simplified_dog.ndjson', 'full_simplified_bird.ndjson', 'full_simplified_fish.ndjson']]
-
-confirm = input(f'This will generate {len(files) * NUMBER_OF_IMAGES} image files, continute? Y/N')
-if confirm not in ['Y', 'y']: sys.exit()
-
-for filename in files:
-    print(f'Processing {filename}...')
+def generate_class(filename):
     CLASS_NAME = filename.replace('.ndjson', '').replace('full_simplified_', '')
+    print(f'Begin generating {CLASS_NAME} images...')
 
     try: os.mkdir(f'{OUTPUT_BASE_DIR}{CLASS_NAME}')
     except: pass    # Ignore if dir already exists
@@ -58,7 +52,21 @@ for filename in files:
             if sample['recognized'] != True: continue
             canvas = generate_image(sample)
             canvas = resize_image(canvas)
-            save_image(canvas, CLASS_NAME)
+            save_image(canvas, CLASS_NAME, count)
             count += 1
-            if count % 200 == 0: print(f"Converted {count} of {NUMBER_OF_IMAGES} {CLASS_NAME}s")
+            if count % (NUMBER_OF_IMAGES/4) == 0: print(f"Generated {(count*100)/NUMBER_OF_IMAGES}% of {CLASS_NAME} images...")
             if count == NUMBER_OF_IMAGES: break
+
+    print(f'Finished generating {CLASS_NAME} images.')
+    return
+
+
+if __name__ == "__main__":
+    files = os.listdir(INPUT_DIR)
+    # files = [file for file in files if 'cat' not in file if 'dog' not in file if 'fish' not in file if 'bird' not in file]
+
+    confirm = input(f'This will generate {len(files) * NUMBER_OF_IMAGES} image files, continute? Y/N ')
+    if confirm not in ['Y', 'y']: sys.exit()
+
+    with Pool() as pool:
+        pool.map(generate_class, files)

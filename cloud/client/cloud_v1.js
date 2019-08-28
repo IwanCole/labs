@@ -11,13 +11,8 @@ setTimeout(() => {
 
 
 
-// Take a 200x200 canvas, and scale down to a 100x100 grid
-function downScale() {
-    var BWdata   = [];
-    var RGBAdata = ctx.getImageData(0, 0, _WIDTH, _HEIGHT).data;
-    
-    for (var i = 0; i < _AREA; i++) BWdata.push(Math.floor(RGBAdata[i*4]/255));
-    
+// Take a NxN canvas, and scale down by a factor of 2.
+function downScale(BWdata) {
     var downScaled = [];
     var base = 0;
     var totalCount = 0;
@@ -61,7 +56,13 @@ function packBytes(pixels) {
 
 
 function submit() {
-    var pixels = downScale();
+    var BWdata   = [];
+    var RGBAdata = ctx.getImageData(0, 0, _WIDTH, _HEIGHT).data;
+    for (var i = 0; i < _AREA; i++) BWdata.push(Math.floor(RGBAdata[i*4]/255));
+    
+    
+    var pixels = downScale(BWdata);
+        pixels = downScale(BWdata);
     var buffer = packBytes(pixels);
     
     var settings = {

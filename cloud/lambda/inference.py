@@ -7,6 +7,8 @@ from keras.initializers import glorot_uniform
 def unpack(data):
     '''
     Unpack a strin of 2500 hex characters into a binary 100x100 image array.
+    Each HEX char represents 4 binary pixels.
+    Flip pixel values at the end (inline with training set)
     '''
     finalOutput = []
     line = []
@@ -18,8 +20,11 @@ def unpack(data):
         pixels = bin(int(x, 16))[2:].zfill(4)
         for p in pixels:
             line.append(int(p))
+
     finalOutput.append(line)
     finalOutput = np.expand_dims(finalOutput, 2)
+    flip = np.vectorize(lambda x: abs(x-1))
+    finalOutput = flip(finalOutput)
     return finalOutput
 
 

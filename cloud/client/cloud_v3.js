@@ -1,4 +1,8 @@
+var LOCK = false;
+
 var submitBtn = document.querySelector(".btn-send");
+var clearBtn = document.querySelector(".btn-clear");
+
 
 setTimeout(() => {
     Fingerprint2.get(function (components) {
@@ -8,6 +12,13 @@ setTimeout(() => {
     });
 }, 1000);
 
+
+function clearCanvas() {
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, _WIDTH, _HEIGHT);
+    ctx.fill();
+    $('val').text('0%');    
+}
 
 
 
@@ -50,7 +61,6 @@ function packBytes(pixels) {
             accum = 0;
         }
     }
-//    console.log(buffer);
     return buffer;
 }
 
@@ -72,7 +82,7 @@ function submit() {
         "method": "POST",
         "headers": {
             "Content-Type": "application/json",
-            "x-api-key": "<<API KEY>>",
+//            "x-api-key": "<<API KEY>>",
             "Accept": "*/*",
             "Access-Control-Allow-Origin" : '*',
         },
@@ -80,16 +90,28 @@ function submit() {
         "data": `{\"devicehash\": \"${_HASH}\", \"data\":\"${buffer}\"}`
     }
 
-    // 'Accept,Access-Control-Allow-Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
+    if (LOCK) return;
+    LOCK = true;
+    $('.lds-grid').fadeToggle();
     
-    $.ajax(settings).done(function (response) {
-        console.log(response);
-        clearCanvas();
+    $.ajax(settings).done((response) => {
+        if (response['statusCode'] === "200") {
+            preds = JSON.parse(response['body']);
+            for (var key in preds) {
+                var prob = Math.round(parseFloat(preds[key]) * 100);
+                $(`.pred-${key}`).text(`${prob}%`);
+            }
+        }
+        LOCK = false;
+        $('.lds-grid').fadeToggle();
     });
-    
 }
 
 
 submitBtn.addEventListener('click', (e) => {
     submit();
+});
+
+clearBtn.addEventListener('click', (e) => {
+    if (!LOCK) clearCanvas(); 
 });

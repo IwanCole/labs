@@ -62,13 +62,13 @@ function submit() {
     
     
     var pixels = downScale(BWdata);
-        pixels = downScale(BWdata);
+        pixels = downScale(pixels);
     var buffer = packBytes(pixels);
     
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url": "https://91l41b7f31.execute-api.eu-west-2.amazonaws.com/default/catchLambda",
+        "url": "https://91l41b7f31.execute-api.eu-west-2.amazonaws.com/default/catchDraw",
         "method": "POST",
         "headers": {
             "Content-Type": "application/json",
@@ -80,6 +80,8 @@ function submit() {
         "data": `{\"devicehash\": \"${_HASH}\", \"data\":\"${buffer}\"}`
     }
 
+    // 'Accept,Access-Control-Allow-Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
+    
     $.ajax(settings).done(function (response) {
         console.log(response);
         clearCanvas();

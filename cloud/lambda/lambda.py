@@ -1,7 +1,6 @@
 import boto3
 import json
-# import tensorflow.keras as keras
-# import numpy as np
+import inference
 from datetime import datetime as dt
 
 print('Loading function')
@@ -19,9 +18,6 @@ def respond(err, res=None):
 
 
 def lambda_handler(event, context):
-    operations = {
-        'POST': lambda dynamo, x: dynamo.put_item(**x),
-    }
 
     if not event:
         return respond(ValueError('Invalid request - missing body'))
@@ -57,8 +53,18 @@ def lambda_handler(event, context):
         }
     }
 
-    operation = 'POST'
-    if operation in operations:
-        return respond(None, operations[operation](dynamo, payload))
-    else:
-        return respond(ValueError('Unsupported method "{}"'.format(operation)))
+    # Attempt to classify drawing
+    image = inference.unpack(event['data'])
+    preds = inference.classify(image)
+
+    # operations = {
+    #     'POST': lambda dynamo, x: dynamo.put_item(**x),
+    # }
+
+    # operation = 'POST'
+    # if operation in operations:
+    dynamo.put_item(**payload)
+    return respond(None, preds)
+        # return respond(None, operations[operation](dynamo, payload))
+    # else:
+        # return respond(ValueError('Unsupported method "{}"'.format(operation)))

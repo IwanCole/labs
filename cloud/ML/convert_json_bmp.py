@@ -6,7 +6,7 @@ from PIL import Image
 from multiprocessing import Pool
 
 LINE_WIDTH = 2
-NUMBER_OF_IMAGES = 20000
+NUMBER_OF_IMAGES = 80000
 INPUT_DIR = 'D:\\sketch_input\\'
 OUTPUT_BASE_DIR = 'D:\\sketch_data\\'
 

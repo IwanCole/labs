@@ -1,3 +1,7 @@
+'''
+Script used for generating a CNN to train on all 49 classes in the dataset.
+'''
+
 import os
 import numpy as np
 from PIL import Image
@@ -80,10 +84,8 @@ model.add(keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2), padding='sam
 model.add(keras.layers.Conv2D(128, kernel_size=3, strides=(1, 1), padding='same', activation='relu'))
 model.add(keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2), padding='same'))
 model.add(keras.layers.Conv2D(64, kernel_size=3, strides=(1, 1), padding='same', activation='relu'))
-# model.add(keras.layer.MaxPooling2D(pool_size=(3,3), strides=(2,2), padding='same'))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(250, activation='relu'))
-# model.add(keras.layers.Dense(1000, activation='relu'))
 model.add(keras.layers.Dense(49, activation='softmax'))
 
 model.compile(optimizer='adam',

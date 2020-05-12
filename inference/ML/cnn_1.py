@@ -1,3 +1,7 @@
+'''
+Script used to train a model on 4 classes (live demo at https://labs.iwancole.me/inference)
+'''
+
 import os
 import numpy as np
 from PIL import Image
@@ -55,10 +59,8 @@ model.add(keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2), padding='sam
 model.add(keras.layers.Conv2D(64, kernel_size=3, strides=(1, 1), padding='same', activation='relu'))
 model.add(keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2), padding='same'))
 model.add(keras.layers.Conv2D(64, kernel_size=3, strides=(1, 1), padding='same', activation='relu'))
-# model.add(keras.layer.MaxPooling2D(pool_size=(3,3), strides=(2,2), padding='same'))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(100, activation='relu'))
-# model.add(keras.layers.Dense(1000, activation='relu'))
 model.add(keras.layers.Dense(4, activation='softmax'))
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
@@ -66,7 +68,4 @@ print(model.summary())
 print('Training model...')
 model.fit(allData, allLabels, validation_split=VAL_SPLIT, epochs=10)
 
-model.save('model_cnn2.h5')
-
-
-# Train
+model.save('model_name_here.h5')

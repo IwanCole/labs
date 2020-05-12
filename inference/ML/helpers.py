@@ -15,7 +15,7 @@ def load_image(filename):
     return imgArray
 
 
-
+# Used to generate training data from the dataset
 def get_line(start, end):
     """Bresenham's Line Algorithm
     Produces a list of tuples from start and end

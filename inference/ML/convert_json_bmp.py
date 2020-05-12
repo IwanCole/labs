@@ -1,3 +1,7 @@
+'''
+Script used to bulk create images from the .ndjson dataset files.
+'''
+
 import os, sys
 import ndjson
 import helpers
@@ -63,7 +67,6 @@ def generate_class(filename):
 
 if __name__ == "__main__":
     files = os.listdir(INPUT_DIR)
-    # files = [file for file in files if 'cat' not in file if 'dog' not in file if 'fish' not in file if 'bird' not in file]
 
     confirm = input(f'This will generate {len(files) * NUMBER_OF_IMAGES} image files, continute? Y/N ')
     if confirm not in ['Y', 'y']: sys.exit()

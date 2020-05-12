@@ -17,9 +17,8 @@ function clearCanvas() {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, _WIDTH, _HEIGHT);
     ctx.fill();
-    $('val').text('0%');    
+    $('val').text('0%');
 }
-
 
 
 // Take a NxN canvas, and scale down by a factor of 2.
@@ -27,17 +26,17 @@ function downScale(BWdata) {
     var downScaled = [];
     var base = 0;
     var totalCount = 0;
-    
+
     while (totalCount < _AREA) {
         var square = [ BWdata[base],
                        BWdata[base + 1],
                        BWdata[base + _WIDTH],
                        BWdata[base + _WIDTH + 1] ];
-        
-        // If the 2x2 square has <2 white pixels, fill as black 
+
+        // If the 2x2 square has <2 white pixels, fill as black
         var sum = square.reduce((x,y)=>x+y, 0);
         downScaled.push( (sum >= 3) ? 1 : 0 );
-        
+
         base += 2;
         totalCount += 4;
         if (base%_WIDTH == 0) base += _WIDTH;
@@ -69,12 +68,12 @@ function submit() {
     var BWdata   = [];
     var RGBAdata = ctx.getImageData(0, 0, _WIDTH, _HEIGHT).data;
     for (var i = 0; i < _AREA; i++) BWdata.push(Math.floor(RGBAdata[i*4]/255));
-    
-    
+
+
     var pixels = downScale(BWdata);
         pixels = downScale(pixels);
     var buffer = packBytes(pixels);
-    
+
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -82,7 +81,6 @@ function submit() {
         "method": "POST",
         "headers": {
             "Content-Type": "application/json",
-//            "x-api-key": "<<API KEY>>",
             "Accept": "*/*",
             "Access-Control-Allow-Origin" : '*',
         },
@@ -93,7 +91,7 @@ function submit() {
     if (LOCK) return;
     LOCK = true;
     $('.lds-grid').fadeToggle();
-    
+
     $.ajax(settings).done((response) => {
         if (response['statusCode'] === "200") {
             preds = JSON.parse(response['body']);
@@ -113,5 +111,5 @@ submitBtn.addEventListener('click', (e) => {
 });
 
 clearBtn.addEventListener('click', (e) => {
-    if (!LOCK) clearCanvas(); 
+    if (!LOCK) clearCanvas();
 });
